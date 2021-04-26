@@ -37,6 +37,11 @@ h1,h5,h4,#txt{
   border-bottom-left-radius: 0;
 }
 .form-signin input[type="password"] {
+  margin-bottom: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-signin input[type="confirm_password"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
