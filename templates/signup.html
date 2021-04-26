@@ -83,7 +83,7 @@
              <h6 id="txt"> YOUR FIRST BOUQUET 
               AND $12 <br> WEEKDAY DELIVERY <br><br>
               USE CODE: WELCOME20</h6>
-            <form class="form-signin" action="/signup" method="post">
+            <form class="form-signin" method="post" action="/signUp">
             <label for="inputName" class="sr-only">Name</label>
             <input type="name" name="inputName" id="inputName" class="form-control" placeholder="First Name" required autofocus>
             <label for="inputLastName" class="sr-only">Last</label>
@@ -92,8 +92,9 @@
             <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required data-toggle="tooltip" data-placement="bottom" title="Must contain 8-18 characters, 1 lower, 1 upper and 1 special character. Cannot be the same as email address.">
-
-            <button id="btnSignUp" class="btn btn-lg btn-secondary btn-block" type="button">Create Account</button>
+            <label for="inputPassword" class="sr-only">Confirm Password</label>
+            <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password" required data-toggle="tooltip" data-placement="bottom" title="Must contain 8-18 characters, 1 lower, 1 upper and 1 special character. Cannot be the same as email address.">
+            <input id="singlebutton" name="singlebutton" class="btn btn-lg btn-secondary btn-block" type="submit" value="Create Account">
           </form>
           </div>
 
