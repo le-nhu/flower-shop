@@ -68,9 +68,9 @@ def validateLogin():
                 session['user'] = data[0][0]
                 return redirect('/userHome')
             else:
-                return render_template('error.html',error = 'Wrong password. Try again')
+                return render_template('errorLogin.html',error = 'Wrong password. Try again')
         else:
-            return render_template('error.html',error = 'Could not find your account. Try again')
+            return render_template('errorLogin.html',error = 'Could not find your account. Try again')
 
 
     except Exception as e:
@@ -96,17 +96,16 @@ def signUp():
         conn = mysql.connect()
         cursor = conn.cursor()
 
-        cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email ,_password, _customerType))
-        
-        data = cursor.fetchall()
+        try:
+            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email ,_password, _customerType))
+            data = cursor.fetchall()
 
-        if len(data) == 0:
-            conn.commit()
-            return json.dumps({'message':'User created successfully !'})
-        else:
-            return json.dumps({'error':str(data[0])})
-
-
+            if len(data) == 0:
+                conn.commit()
+                return json.dumps({'message':'User created successfully !'})
+        except:
+            return render_template("errorSignup.html",error="Email already exists")
+                
     else:
         return json.dumps({'html':'<span>Enter the required fields!</span>'})
 
