@@ -31,6 +31,10 @@ def showUpdate(id):
 def showSignin():
     return render_template('signin.html')
 
+@app.route('/userHomepageLink')
+def userHomepageLink():
+    return render_template('userHome.html')
+
 @app.route('/userHome')
 def userHome():
     if session.get('user'):

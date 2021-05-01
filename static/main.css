@@ -1,37 +1,43 @@
-.banner1{
+.banner1 {
     background-image: url(https://pbs.twimg.com/media/Ey16tKLVgAIftzv?format=jpg&name=large);
     min-height: auto;
     background-repeat: repeat;
 }
 
-.banner2{
+
+.banner2 {
     background-image: url(https://pbs.twimg.com/media/Ey16tKXVgAArk3z?format=jpg&name=large);
     min-height: auto;
     background-repeat: repeat;
 }
 
-h2,.card,.bannerText2{
+h2,
+.card,
+.bannerText2 {
     text-align: center;
 }
+
 .carousel-item,
 .carousel-inner,
 .carousel-inner img {
-  height: 100%;
-  width: auto;
+    height: 100%;
+    width: auto;
 }
 
 .carousel-item {
-  text-align: center;
+    text-align: center;
 }
+
 .carousel {
     height: 400px;
 }
+
 .carousel-inner img {
     height: auto;
-    width:100%;
-  }
+    width: 100%;
+}
 
-footer{
+footer {
     border-top: 1px solid lightgray;
     padding-top: 20px;
     padding-left: 20px;
@@ -39,7 +45,7 @@ footer{
     overflow: hidden;
 }
 
-.bottom{
+.bottom {
     text-align: center;
 }
 
@@ -53,18 +59,19 @@ footer{
     color: #1d4b6d;
 }
 
-ul.black{
+ul.black {
     list-style-type: none;
-    margin:0;
+    margin: 0;
     padding: 0;
 }
 
-a, .blueFont{
+a,
+.blueFont {
     color: #1d4b6d;
-    
+
 }
 
-a:hover{
+a:hover {
     text-decoration: none;
 }
 
@@ -72,24 +79,3 @@ a:hover{
     opacity: 0.7;
 }
 
-/* Play with the font size later for the jumbotron
- Small devices (tablets, 768px and up) 
-@media (max-width: 768px) {
-    .jumbotron h1 {
-      font-size: 2rem;
-    }
-}
-
-Medium devices (desktops, 992px and up)
-@media (min-width: 992px) {
-    .jumbotron h1 {
-        font-size: 2rem;
-    }
-}
-
-Large devices (large desktops, 1200px and up) 
-@media (min-width: 1200px) {
-    .jumbotron h1 {
-       font-size: 2rem;
-    }
-}*/
