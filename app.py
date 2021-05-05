@@ -31,6 +31,10 @@ def showUpdate(id):
 def showSignin():
     return render_template('signin.html')
 
+@app.route('/showHomePage')
+def showHomePage():
+    return render_template('homepage.html')
+
 @app.route('/userHomepageLink')
 def userHomepageLink():
     return render_template('userHome.html')
@@ -106,7 +110,7 @@ def signUp():
 
             if len(data) == 0:
                 conn.commit()
-                return json.dumps({'message':'User created successfully !'})
+                return redirect('/userHome')
         except:
             return render_template("errorSignup.html",error="Email already exists")
                 
