@@ -31,6 +31,14 @@ def showUpdate(id):
 def showSignin():
     return render_template('signin.html')
 
+@app.route('/showHomePage')
+def showHomePage():
+    return render_template('homepage.html')
+
+@app.route('/userHomepageLink')
+def userHomepageLink():
+    return render_template('userHome.html')
+
 @app.route('/userHome')
 def userHome():
     if session.get('user'):
@@ -97,12 +105,12 @@ def signUp():
         cursor = conn.cursor()
 
         try:
-            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email ,_password, _customerType))
+            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (_firstname, _lastname, _email ,_password))
             data = cursor.fetchall()
 
             if len(data) == 0:
                 conn.commit()
-                return json.dumps({'message':'User created successfully !'})
+                return redirect('/userHome')
         except:
             return render_template("errorSignup.html",error="Email already exists")
                 
