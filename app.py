@@ -97,7 +97,7 @@ def signUp():
         cursor = conn.cursor()
 
         try:
-            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email ,_password, _customerType))
+            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (_firstname, _lastname, _email ,_password))
             data = cursor.fetchall()
 
             if len(data) == 0:
