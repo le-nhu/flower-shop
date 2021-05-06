@@ -113,13 +113,13 @@ def signUp():
         conn = mysql.connect()
         cursor = conn.cursor()
 
-        # print("FirstName: ", _firstname)
-        # print("LastName: ", _lastname)
-        # print("Email: ", _email)
-        # print("Password: ", _password)
-        # print("PasswordHashed: ", _passwordHashed)
-        # print("ConfirmPassword: ", _confirmPassword)
-        # print("CustomerType: ", _customerType)
+        print("FirstName: ", _firstname)
+        print("LastName: ", _lastname)
+        print("Email: ", _email)
+        print("Password: ", _password)
+        print("PasswordHashed: ", _passwordHashed)
+        print("ConfirmPassword: ", _confirmPassword)
+        print("CustomerType: ", _customerType)
 
         if(_password != _confirmPassword):
             return render_template("errorSignup.html",error="Passwords do not match")
