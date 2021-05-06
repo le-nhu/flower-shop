@@ -102,7 +102,7 @@ def signUp():
     _lastname = request.form['inputLastName']
     _email = request.form['inputEmail']
     _password = request.form['inputPassword']
-    _customerType = 2
+    _customerType = "2"
 
     _passwordHashed = hashPass(_password)
     print("Hashed Password: ", _passwordHashed)
@@ -120,15 +120,15 @@ def signUp():
         print("Password: ", _passwordHashed)
         print("CustomerType", _customerType)
 
-        #try:
-        cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email, str(_passwordHashed), _customerType))
-        data = cursor.fetchall()
+        try:
+            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email, str(_passwordHashed), _customerType))
+            data = cursor.fetchall()
 
-        if len(data) == 0:
-            conn.commit()
-            return redirect('/userHome')
-        # except:
-        #     return render_template("errorSignup.html",error="Email already exists")
+            if len(data) == 0:
+                conn.commit()
+                return redirect('/userHome')
+        except:
+            return render_template("errorSignup.html",error="Email already exists")
                 
     else:
         return json.dumps({'html':'<span>Enter the required fields!</span>'})
