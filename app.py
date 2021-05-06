@@ -102,6 +102,7 @@ def signUp():
     _lastname = request.form['inputLastName']
     _email = request.form['inputEmail']
     _password = request.form['inputPassword']
+    _confirmPassword = request.form['confirm_password']
     _customerType = "2"
 
     _passwordHashed = hashPass(_password)
@@ -117,8 +118,13 @@ def signUp():
         print("FirstName: ", _firstname)
         print("LastName: ", _lastname)
         print("Email: ", _email)
-        print("Password: ", _passwordHashed)
-        print("CustomerType", _customerType)
+        print("Password: ", _password)
+        print("PasswordHashed: ", _passwordHashed)
+        print("ConfirmPassword: ", _confirmPassword)
+        print("CustomerType: ", _customerType)
+
+        if(_password != _confirmPassword):
+            return render_template("errorSignup.html",error="Passwords do not match")
 
         try:
             cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email, str(_passwordHashed), _customerType))
