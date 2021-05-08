@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, json, redirect, jsonify
 from flaskext.mysql import MySQL
 from flask import session
+import hashlib
+
 app = Flask(__name__)
 
 mysql = MySQL()
@@ -14,6 +16,8 @@ mysql.init_app(app)
 
 app.secret_key = 'secret key can be anything!'
 
+def hashPass(password):
+    return (hashlib.md5(password.encode())).hexdigest()
 
 @app.route("/")
 def main():
@@ -38,6 +42,14 @@ def showHomePage():
 @app.route('/userHomepageLink')
 def userHomepageLink():
     return render_template('userHome.html')
+
+@app.route('/userCart')
+def userCart():
+    return render_template('userShoppingCart.html')
+
+@app.route('/shoppingCart')
+def shoppingCart():
+    return render_template('shoppingcart.html')
 
 @app.route('/userHome')
 def userHome():
@@ -64,6 +76,8 @@ def validateLogin():
 
         con = mysql.connect()
         cursor = con.cursor()
+
+        passwordHashed = hashPass(_password)
         
 
         cursor.execute("SELECT * FROM mydb.customer WHERE email = %s", (_email))
@@ -72,7 +86,7 @@ def validateLogin():
 
 
         if len(data) > 0:
-            if str(data[0][3]) == _password:
+            if str(data[0][3]) == passwordHashed:
                 session['user'] = data[0][0]
                 return redirect('/userHome')
             else:
@@ -96,16 +110,30 @@ def signUp():
     _lastname = request.form['inputLastName']
     _email = request.form['inputEmail']
     _password = request.form['inputPassword']
-    _customerType = 'regular'
- 
+    _confirmPassword = request.form['confirm_password']
+    _customerType = "2"
+
+    _passwordHashed = hashPass(_password)
+
     # validate the received values
     if _firstname and _lastname and _email and _password:
 
         conn = mysql.connect()
         cursor = conn.cursor()
 
+        print("FirstName: ", _firstname)
+        print("LastName: ", _lastname)
+        print("Email: ", _email)
+        print("Password: ", _password)
+        print("PasswordHashed: ", _passwordHashed)
+        print("ConfirmPassword: ", _confirmPassword)
+        print("CustomerType: ", _customerType)
+
+        if(_password != _confirmPassword):
+            return render_template("errorSignup.html",error="Passwords do not match")
+
         try:
-            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (_firstname, _lastname, _email ,_password))
+            cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email, str(_passwordHashed), _customerType))
             data = cursor.fetchall()
 
             if len(data) == 0:
