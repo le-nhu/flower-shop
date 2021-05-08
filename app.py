@@ -23,6 +23,14 @@ def hashPass(password):
 def main():
     return render_template('homepage.html')
 
+@app.route("/showProduct")
+def showProduct():
+    return render_template('products.html')
+
+@app.route("/showProductUser")
+def showProductUser():
+    return render_template('userProducts.html')
+
 @app.route('/showSignUp')
 def showSignUp():
     return render_template('signup.html')
@@ -42,6 +50,14 @@ def showHomePage():
 @app.route('/userHomepageLink')
 def userHomepageLink():
     return render_template('userHome.html')
+
+@app.route('/userCart')
+def userCart():
+    return render_template('userShoppingCart.html')
+
+@app.route('/shoppingCart')
+def shoppingCart():
+    return render_template('shoppingcart.html')
 
 @app.route('/userHome')
 def userHome():
