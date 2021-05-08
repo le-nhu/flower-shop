@@ -23,6 +23,14 @@ def hashPass(password):
 def main():
     return render_template('homepage.html')
 
+@app.route("/showProduct")
+def showProduct():
+    return render_template('products.html')
+
+@app.route("/showProductUser")
+def showProductUser():
+    return render_template('userProducts.html')
+
 @app.route('/showSignUp')
 def showSignUp():
     return render_template('signup.html')

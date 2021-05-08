@@ -27,7 +27,7 @@
                   <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Flowers</a>
+                  <a class="nav-link" href="/showProduct">Flowers</a>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,7 +67,6 @@
       
         <h1>Log In</h1>
         <h4 style="font-weight: bolder; color: red;">{{error}}</h4>
-        <!--Grt this to redirect to userhome.html is the login is correct-->
         <form class="form-signin" action="/validateLogin" method="post">
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
@@ -75,7 +74,7 @@
         <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>        
         <button id="btnSignIn" type="submit" class="btn btn-lg btn-secondary btn-block">Log in</button>
       </form>  
-        <h5>Not registered?<a href="signup.html"> Create Account</a></h5>
+      <h5>Not registered?<a href="/showSignUp"> Create Account</a></h5>
       </div>
 
      <!--Footer-->
@@ -123,8 +122,6 @@
         <p>Copyright @ 2021</p>
       </div>
     </footer>
-<!-- Optional JavaScript -->
-   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       
 </body>
 </html>
