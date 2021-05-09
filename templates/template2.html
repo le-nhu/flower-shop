@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flower Shop</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="../static/main.css">
+  <script>
+    $(document).ready(function () {
+      $.ajax({
+        url: '/getEditTask',
+        dataType: "json",
+        type: 'GET',
+        success: function (response) {
+          console.log(response)
+          image = Object.values(response)[0][6];
+          name = Object.values(response)[0][3];
+          cost = Object.values(response)[0][5];
+          quantity = Object.values(response)[0][4];
+          category = Object.values(response)[0][8];
+          description = Object.values(response)[0][9];
+          category_id = Object.values(response)[0][7];
+          product_id = Object.values(response)[0][2];
+          store_id = 1;
+
+          $("#txtTitle").text(name);
+          $("#txtDesc").text(description);
+          $("#txtQuantity").text(quantity);
+          $("#txtImg").text(image);
+          var num = document.getElementById('txtCost');
+          num.value = cost;
+
+          if (category_id == 1) {
+            $('#inlineRadio1').prop('checked', true);
+          }
+          else if (category_id == 2) {
+            $('#inlineRadio2').prop('checked', true);
+          }
+          else if (category_id == 3) {
+            $('#inlineRadio3').prop('checked', true);
+          }
+          else if (category_id == 4) {
+            $('#inlineRadio4').prop('checked', true);
+          }
+          else {
+            $('#inlineRadio1').prop('checked', false);
+            $('#inlineRadio2').prop('checked', false);
+            $('#inlineRadio3').prop('checked', false);
+            $('#inlineRadio4').prop('checked', false);
+          }
+          console.log(store_id);
+          $('form').attr('action', '/editItem/' + product_id + '/' + store_id);
+
+
+
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
+    });
+  </script>
+</head>; <style>
+  form {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .form-check {
+    margin-bottom: 20px;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  .btn {
+    float: right;
+    display: inline-block;
+    width: 10%;
+    margin-left: 20px;
+  }
+</style>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="logout"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+            fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+            <path fill-rule="evenodd"
+              d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+          </svg></a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="jumbotron">
+    <h2>Edit Item in Inventory</h2>
+    <form method="post" action="/editItem">
+
+      <div class="form-group">
+        <label class="control-label" for="txtTitle">Product Name</label>
+        <div>
+          <textarea name="ProductName" id="txtTitle" class="form-control"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="txtDesc">Description</label>
+        <div>
+          <textarea name="inputDescription" id="txtDesc" placeholder="Details" class="form-control"></textarea>
+        </div>
+      </div>
+
+      <label class="control-label" for="txtCost">Cost</label>
+      <div class="input-group mb-3">
+
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <input type="text" id="txtCost" class="form-control" name="inputCost">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="txtImg">Image</label>
+        <div>
+          <textarea name="inputImg" id="txtImg" placeholder="Give the link to image file"
+            class="form-control"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="txtQuantity">Quantity</label>
+        <div>
+          <textarea name="inputQuantity" id="txtQuantity" class="form-control"></textarea>
+        </div>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+        <label class="form-check-label" for="inlineRadio1">Summer</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+        <label class="form-check-label" for="inlineRadio2">Fall</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
+        <label class="form-check-label" for="inlineRadio3">Winter</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="4">
+        <label class="form-check-label" for="inlineRadio4">Spring</label>
+      </div>
+
+
+      <a href="/admin" class="btn btn-danger" role="button">Exit</a>
+      <input id="singleButton" name="singlebutton" class="btn btn-success" type="submit" value="Save" />
+    </form>
+
+
+  </div>
+  </div>
+
+
+  <!--Footer-->
+  <footer>
+    <div class="container-fluid-footer">
+      <div class="row">
+        <div class="col-md-6">
+          <h6>COMPANY</h6>
+          <p class="blueFont">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, tempora nostrum laudantium
+            ut quam possimus ad libero consectetur id vero sint inventore mollitia tempore optio ullam quo laboriosam
+            excepturi magnam.</p>
+          <div class="row">
+            <div class="col-md-6">
+              <h6>HELP</h6>
+              <ul class="black">
+                <li><a href="#">Customer Service</a></li>
+                <li><a href="#">Flower Guide</a></li>
+                <li><a href="#">Plant Guide</a></li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h6>ACCOUNT</h6>
+              <ul class="black">
+                <li><a href="#">Manage Your Account</a></li>
+                <li><a href="#">Track Your Order</a></li>
+                <li><a href="#">Order History</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <h6>CONTACT</h6>
+          <p class="blueFont"><i class="fa fa-mobile" aria-hidden="true"></i> 1.800.123-4567</p>
+          <p class="blueFont">We are here for you 24 hours a day</p>
+        </div>
+        <div class="col-md-3">
+          <h6>CONNECT</h6>
+          <a href="#" class="fa fa-instagram"></a>
+          <a href="#" class="fa fa-youtube"></a>
+          <a href="#" class="fa fa-facebook"></a>
+          <a href="#" class="fa fa-pinterest"></a>
+          <a href="#" class="fa fa-twitter"></a>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <p>Copyright @ 2021</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
