@@ -274,14 +274,14 @@ def colors():
     #else:
     #    return render_template('errorLogin.html',error= 'An error occurred!')
 
-# def getProductId(pName):
-#     conn = mysql.connect()
-#     cursor = conn.cursor()
+def getProductId(pName):
+    conn = mysql.connect()
+    cursor = conn.cursor()
 
-#     #cursor.execute("SELECT * FROM mydb.customer WHERE email = %s", (_email))
-#     cursor.execute("SELECT product_id FROM mydb.product WHERE product_name = %s", (pName))
-#     productId = cursor.fetchall()
-#     return productId
+    #cursor.execute("SELECT * FROM mydb.customer WHERE email = %s", (_email))
+    cursor.execute("SELECT product_id FROM mydb.product WHERE product_name = %s", (pName))
+    productId = cursor.fetchall()
+    return productId
 
 def getCustomerId(customer_id):
     conn = mysql.connect()
