@@ -4,12 +4,20 @@
     background-repeat: repeat;
 }
 
-
 .banner2 {
     background-image: url(https://pbs.twimg.com/media/Ey16tKXVgAArk3z?format=jpg&name=large);
     min-height: auto;
     background-repeat: repeat;
 }
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  button.btn {
+    margin-top: auto;
+  }
 
 h2,
 .card,

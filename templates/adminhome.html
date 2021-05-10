@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Flower Shop</title>
+  <title>DNA Flower Shop</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -12,9 +12,96 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
   integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
 </script>
-  </head>
+  <link rel="stylesheet" href="../static/main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+  $(document).ready(function() {
+              $.ajax({
+                  url: '/adminHomes',
+                  dataType: "json",
+                  type: 'GET',
+                  success: function(response) {
+                    var items = [];
+                    var i = 0;
 
+                    $.each(response,function(key,val){
+                        id = Object.values(response)[i][2];
+                        image = Object.values(response)[i][6];
+                        name =Object.values(response)[i][3];
+                        cost = Object.values(response)[i][5];
+                        quantity = Object.values(response)[i][4];
+                        store = Object.values(response)[i][1];
+                        category = Object.values(response)[i][8];
+                        categoryid = Object.values(response)[i][7];
+                        description = Object.values(response)[i][9];
+
+                        items.push("<tr><td>" +id +"</td><td><img src='"+image+"'alt='"+name+"' width='100' height='100'></td><td>"+name+ "</td><td>"+category+ "</td><td>"+store + "</td><td>"+description +"</td><td>$"+cost +
+                          "</td><td>"+quantity+"</td><td><form action='/showEdit'><button type='submit' name='editTask' class='btn btn-secondary' value='"+id+"'>Edit</button></form></td>"
+                          +"<td><form action='/deleteItem' method='post'><button type='submit' name='deleteItem' class='btn btn-danger'value='"+id+"'>Delete</button></form></td></tr>");
+                        i++;
+                        });
+                    $(".todoList").append(items);
+
+                    $("#myInput").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $(".todoList tr").filter(function() {
+                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+
+                    });
+                  },
+                  error: function(error) {
+                      console.log(error);
+                  }
+            });
+        });
+
+  </script>
+  </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+        </svg>
+        <input id="myInput" type="text" >
+      </li>
+    </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="logout"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+            <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+          </svg></a>
+        </li>
+        
+      </ul>
+    </nav>
+
+ 
+  <div class="table-responsive">
+    <table class="table table-sm table-borderless mb-0">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Store</th>
+                <th>Description</th> 
+                <th>Cost</th>
+                <th>Quantity</th>
+                <th></th>
+                <th> <a href="/showAddForm" class="btn btn-secondary" role="button" id=add>Add Item</a> </th>
+            </tr>
+        </thead>
+        <tbody class="todoList">
+        </tbody>
+    </table> 
+</div>
 
 
 <!--Footer-->
