@@ -1,18 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Flower Shop</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DNA Flower Shop</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
     <link rel="stylesheet" href="../static/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $.ajax({
+          url: '/adminHomes',
+          dataType: "json",
+          type: 'GET',
+          success: function (response) {
+            var products = [];
+            var i = 0;
+            var spring = 0;
+            $.each(response, function (key, val) {
+              image = Object.values(response)[i][6];
+              name = Object.values(response)[i][3];
+              cost = Object.values(response)[i][5];
+              category = Object.values(response)[i][8];
+              description = Object.values(response)[i][9];
+
+                  if(i==0){
+                    $("#f1").attr("src",image);
+                    $("#f1name").html(name);
+                    $("#f1cost").html("$" + cost);
+                    $("#f1description").html(description);
+                  }
+                  else if(i==1){
+                    $("#f2").attr("src",image);
+                    $("#f2name").html(name);
+                    $("#f2cost").html("$" + cost);
+                    $("#f2description").html(description);
+                  }
+                  else if(i==3){
+                    $("#f3").attr("src",image);
+                    $("#f3name").html(name);
+                    $("#f3cost").html("$" + cost);
+                    $("#f3description").html(description);
+                  }  
+
+
+                if(category == "Spring"){
+                  if(spring==0){
+                    $("#spring1").attr("src",image);
+                    $("#spring1name").html(name);
+                    $("#spring1cost").html("$" + cost);
+                    $("#spring1description").html(description);
+                  }
+                  else if(spring==1){
+                    $("#spring2").attr("src",image);
+                    $("#spring2name").html(name);
+                    $("#spring2cost").html("$" + cost);
+                    $("#spring2description").html(description);
+                  }
+                  else if(spring==4){
+                    $("#spring3").attr("src",image);
+                    $("#spring3name").html(name);
+                    $("#spring3cost").html("$" + cost);
+                    $("#spring3description").html(description);
+                  }  
+                  spring++;
+                }
+                i++;
+            });  
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      });
+  
+    </script>
   </head>
 
 <body>
@@ -24,7 +93,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="/userHomepageLink">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/userhome">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/showProductUser">Flowers</a>
@@ -34,10 +103,10 @@
               Season
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Spring</a>
-              <a class="dropdown-item" href="#">Summer</a>
-              <a class="dropdown-item" href="#">Fall</a>
-              <a class="dropdown-item" href="#">Winter</a>
+              <a class="dropdown-item" href="/userspring">Spring</a>
+              <a class="dropdown-item" href="/usersummer">Summer</a>
+              <a class="dropdown-item" href="/userfall">Fall</a>
+              <a class="dropdown-item" href="/userwinter">Winter</a>
             </div>
           </li>
         </ul>
@@ -73,32 +142,35 @@
   <h2>Spring Preview<br></h2>
   <div class="row flex-row flex-nowrap" style="overflow-x: auto;">
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card h-100 " style="width: 18rem;">
+        <img src="..." class="card-img-top" id="spring1" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Cactus</h5>
-          <p class="card-text">$20</p>
-          <a href="#" class="btn btn-secondary">Add To Cart</a>
+          <h5 class="card-title" id="spring1name"></h5>
+          <p class="card-text" id="spring1description"></p>
+          <p class="card-text" id="spring1cost"></p>
+          <a href="/showProductUser" class="btn btn-secondary">Shop now</a>
         </div>
       </div>
     </div>
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card h-100" style="width: 18rem;">
+        <img src="..." class="card-img-top" id="spring2"alt="...">
         <div class="card-body">
-          <h5 class="card-title">idk</h5>
-          <p class="card-text">$54</p>
-          <a href="#" class="btn btn-secondary">Add To Cart</a>
+          <h5 class="card-title"  id="spring2name"></h5>
+          <p class="card-text" id="spring2description"></p>
+          <p class="card-text" id="spring2cost"></p>
+          <a href="/showProductUser" class="btn btn-secondary">Shop now</a>
         </div>
       </div>
     </div>
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card h-100" style="width: 18rem;">
+        <img src="..." class="card-img-top" id="spring3"alt="...">
         <div class="card-body">
-          <h5 class="card-title">idk</h5>
-          <p class="card-text">$32</p>
-          <a href="#" class="btn btn-secondary">Add To Cart</a>
+          <h5 class="card-title"  id="spring3name"></h5>
+          <p class="card-text" id="spring3description"></p>
+          <p class="card-text" id="spring3cost"></p>
+          <a href="/showProductUser" class="btn btn-secondary">Show now</a>
         </div>
       </div>
     </div>
@@ -145,32 +217,35 @@
   <br>
 <div class="row flex-row flex-nowrap" style="overflow-x: auto;">
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card h-100" style="width: 18rem;">
+        <img src="..." class="card-img-top" id="f1" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Traditional Rose</h5>
-          <p class="card-text">$20</p>
-          <a href="#" class="btn btn-secondary">Add To Cart</a>
+          <h5 class="card-title" id="f1name"></h5>
+          <p class="card-text" id="f1description"></p>
+          <p class="card-text" id="f1cost"></p>
+          <a href="/showProductUser" class="btn btn-secondary">Shop now</a>
         </div>
       </div>
     </div>
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card h-100" style="width: 18rem;">
+        <img src="..." class="card-img-top" id="f2" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Blush Bouquet</h5>
-          <p class="card-text">$54</p>
-          <a href="#" class="btn btn-secondary">Add To Cart</a>
+          <h5 class="card-title" id="f2name"></h5>
+          <p class="card-text" id="f2description"></p>
+          <p class="card-text" id="f2cost"></p>
+          <a href="/showProductUser" class="btn btn-secondary">Shop now</a>
         </div>
       </div>
     </div>
     <div class="col-sm">
-      <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card h-100" style="width: 18rem;">
+        <img src="..." class="card-img-top" id="f3" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">$32</p>
-          <a href="#" class="btn btn-secondary">Add To Cart</a>
+          <h5 class="card-title" id="f3name"></h5>
+          <p class="card-text" id="f3description"></p>
+          <p class="card-text" id="f3cost"></p>
+          <a href="/showProductUser" class="btn btn-secondary">Show now</a>
         </div>
       </div>
     </div>
@@ -194,7 +269,9 @@
       <div class="row">
           <div class="col-md-6" >
               <h6>COMPANY</h6>
-              <p class="blueFont">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, tempora nostrum laudantium ut quam possimus ad libero consectetur id vero sint inventore mollitia tempore optio ullam quo laboriosam excepturi magnam.</p>
+              <p class="blueFont">We are committed to providing fresh flowers with attentive care that will become your precious memories. 
+                You can count on us to help guide you through choosing the best flowers for any occasion. 
+              </p>
               <div class="row">
               <div class="col-md-6" >
                 <h6>HELP</h6>

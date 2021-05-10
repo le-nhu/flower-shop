@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flower Shop</title>
+    <title>DNA Flower Shop</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -12,10 +12,48 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
   </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../static/main.css">
+    <script>
+      $(document).ready(function () {
+        $.ajax({
+          url: '/getCart',
+          dataType: "json",
+          type: 'GET',
+          success: function (response) {
+            var products = [];
+            var i = 0;
+            var total = 0;
+            $( ".empty-cart-cls" ).remove();
+
+          products.push('<div class="table-responsive"><table class="table table-sm table-borderless mb-0"><thead class="thead-dark"><tr><th>Product Name</th><th>Cost</th><th></th><th>Total</th></tr></thead><tbody class="todoList">') ;
+
+            $.each(response, function (key, val) {
+              product_id = Object.values(response)[i][19];
+              name = Object.values(response)[i][20];
+              cost = Object.values(response)[i][21];
+              quantity = Object.values(response)[i][25];
+              deleted = Object.values(response)[i][27];
+              total += cost;
+              
+              products.push('<tr><td>'+name+'</td><td>'+ cost +'</td><td><form action="/deleteCartItem/'+ product_id + '"  method="post"><button type="submit" name="deleteItem" class="btn btn-danger"value="+id+">Delete</button></form> </td><td></td></tr>')
+
+            
+              i++;
+  
+            });
+            products.push('</tbody> </table></div>' + total + <button type="submit" name="deleteItem" class="btn btn-secondary">Purchase</button>);
+            $(".card-body").append(products);
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      });
+  
+    </script>
   </head>
   <body>
-    <!--The nav bar header-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -23,7 +61,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="/userHomepageLink">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/userhome">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/showProductUser">Flowers</a>
@@ -33,10 +71,10 @@
               Season
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Spring</a>
-              <a class="dropdown-item" href="#">Summer</a>
-              <a class="dropdown-item" href="#">Fall</a>
-              <a class="dropdown-item" href="#">Winter</a>
+              <a class="dropdown-item" href="/userspring">Spring</a>
+              <a class="dropdown-item" href="/usersummer">Summer</a>
+              <a class="dropdown-item" href="/userfall">Fall</a>
+              <a class="dropdown-item" href="/userwinter">Winter</a>
             </div>
           </li>
         </ul>
@@ -59,9 +97,27 @@
       </div>
     </nav>
 
-          <div>
-            <h1>do the cart page</h1>
+    <div class="container-fluid mt-100">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h5>Cart</h5>
+            </div>
+            <div class="card-body cart">
+              <div class="col-sm-12 empty-cart-cls text-center"> <img src="https://i.imgur.com/dCdflKN.png"
+                  width="130" height="130" class="img-fluid mb-4 mr-3">
+                <h3><strong>Your Cart is Empty.</strong></h3>
+                <h4>Add something to your cart.</h4> <a href="/showProductUser"
+                  class="btn btn-secondary cart-btn-transform m-3" data-abc="true">continue shopping</a>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
 
     <!--Footer-->
     <footer>
@@ -69,7 +125,9 @@
           <div class="row">
               <div class="col-md-6" >
                   <h6>COMPANY</h6>
-                  <p class="blueFont">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, tempora nostrum laudantium ut quam possimus ad libero consectetur id vero sint inventore mollitia tempore optio ullam quo laboriosam excepturi magnam.</p>
+                  <p class="blueFont">We are committed to providing fresh flowers with attentive care that will become your precious memories. 
+                    You can count on us to help guide you through choosing the best flowers for any occasion. 
+                  </p>
                   <div class="row">
                   <div class="col-md-6" >
                     <h6>HELP</h6>

@@ -49,7 +49,10 @@ def userCart():
 
 @app.route('/shoppingCart')
 def shoppingCart():
-    return render_template('shoppingcart.html')
+    if session.get('user') :
+        return render_template('userShoppingcart.html')
+    else :
+        return render_template('shoppingcart.html')
 
 @app.route('/userhome')
 def userhome():
@@ -86,7 +89,16 @@ def validateLogin():
         if len(data) > 0:
             if str(data[0][3]) == passwordHashed:
                 session['user'] = data[0][0]
-                return redirect('/userhome')
+                _session_id = session.get('user')
+                id = data[0][0]
+                userType = data[0][12]
+                cursor.execute("UPDATE mydb.customer SET session_id = %s WHERE customer_id = %s", (_session_id,id))
+                con.commit()
+                createCart(data[0][0])
+                if(userType == 2):
+                    return redirect('/userhome')
+                else:
+                    return redirect('/admin')
             else:
                 return render_template('errorLogin.html',error = 'Wrong password! Try again.')
         else:
@@ -102,13 +114,11 @@ def validateLogin():
     
 @app.route('/signUp',methods=['GET','POST'])
 def signUp():
- 
     # read the posted values from the UI
     _firstname = request.form['inputName']
     _lastname = request.form['inputLastName']
     _email = request.form['inputEmail']
     _password = request.form['inputPassword']
-    _confirmPassword = request.form['confirm_password']
     _customerType = "2"
 
     _passwordHashed = hashPass(_password)
@@ -119,13 +129,10 @@ def signUp():
         conn = mysql.connect()
         cursor = conn.cursor()
 
-        if(_password != _confirmPassword):
-            return render_template("errorSignup.html",error="Passwords do not match!")
-
         try:
             cursor.execute("INSERT INTO mydb.customer(first_name, last_name, email, password, customer_type_id) VALUES (%s, %s, %s, %s, %s)", (_firstname, _lastname, _email, str(_passwordHashed), _customerType))
             data = cursor.fetchall()
-
+          
             if len(data) == 0:
                 conn.commit()
                 return redirect('/showSignIn')
@@ -134,6 +141,40 @@ def signUp():
                 
     else:
         return json.dumps({'html':'<span>Enter the required fields!</span>'})
+
+@app.route('/addToCart/<productId>',methods=['POST','GET'])
+def addItemToCart(productId):
+    if session.get('user'):
+        product_id = productId
+        session_id = session.get('user')
+        store_id = "1"
+        
+        conn = mysql.connect()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("SELECT customer_id FROM mydb.customer WHERE session_id=%s",(session_id))
+            data = cursor.fetchall()
+            customer_id = data[0][0]
+
+            cursor.execute("SELECT cart_id FROM mydb.cart WHERE customer_id=%s",(customer_id))
+            data = cursor.fetchall()
+            cart_id = data[0][0]
+            
+            cursor.execute("INSERT into mydb.cart_detail (cart_id, store_id, product_id) VALUES (%s, %s, %s)", (cart_id,store_id,productId))
+
+            data = cursor.fetchall()
+            
+            if len(data) == 0:
+                conn.commit()
+                return redirect('/showProductUser')
+                
+            else:
+                return render_template('error.html',error= 'An error occurred!')
+        except Exception as e:
+            return render_template('error.html',error = str(e))
+    else:
+        return render_template('error.html',error = 'Unauthorized Access')
 
 
 @app.route('/updateItem/<id>',methods=['POST'])
@@ -233,20 +274,38 @@ def colors():
     #else:
     #    return render_template('errorLogin.html',error= 'An error occurred!')
 
-def getProductId(pName):
+# def getProductId(pName):
+#     conn = mysql.connect()
+#     cursor = conn.cursor()
+
+#     #cursor.execute("SELECT * FROM mydb.customer WHERE email = %s", (_email))
+#     cursor.execute("SELECT product_id FROM mydb.product WHERE product_name = %s", (pName))
+#     productId = cursor.fetchall()
+#     return productId
+
+def getCustomerId(customer_id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    #cursor.execute("SELECT * FROM mydb.customer WHERE email = %s", (_email))
-    cursor.execute("SELECT product_id FROM mydb.product WHERE product_name = %s", (pName))
-    productId = cursor.fetchall()
-    return productId
+    cursor.execute("SELECT customer_id FROM mydb.customer WHERE customer_id = %s", (customer_id))
+    customerId = cursor.fetchall()
+    return customerId
 
 def insertInventory(pName, quantity):
     conn = mysql.connect()
     cursor = conn.cursor()
     productId = getProductId(pName)
     cursor.execute("INSERT into mydb.inventory (store_id, product_id, inventory_quantity) VALUES (%s, %s, %s)", (_storeId, productId, quantity))
+    data = cursor.fetchall()
+    
+    if len(data) == 0:
+        conn.commit()
+        return True
+
+def createCart(customer_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute("INSERT into mydb.cart (customer_id) VALUES (%s)", (customer_id))
     data = cursor.fetchall()
     
     if len(data) == 0:
@@ -373,14 +432,14 @@ def editItem(productId, storeId):
     except Exception as e:
         return render_template('error.html', error = str(e))   
 
-@app.route("/deleteItem/<id>",methods=['POST'])
-def deleteItem(id):
+@app.route("/deleteItem",methods=['POST'])
+def deleteItem():
     try:
-        #_id = int(request.form['deleteItem'])
+        _id = int(request.form['deleteItem'])
         con = mysql.connect()
         cursor = con.cursor()
 
-        cursor.execute("UPDATE mydb.product set deleted = %s WHERE product_id = %s", (1, id))
+        cursor.execute("UPDATE mydb.product set deleted = %s WHERE product_id = %s", (1, _id))
         con.commit()
         return redirect('/admin')
 
@@ -389,6 +448,80 @@ def deleteItem(id):
     finally:
         cursor.close()
         con.close()
+
+    
+@app.route("/deleteCartItem/<id>",methods=['POST'])
+def deleteCartItem(id):
+    try:
+        #_id = int(request.form['deleteItem'])
+        con = mysql.connect()
+        cursor = con.cursor()
+        _userId = session.get('user')
+
+        cursor.execute("SELECT cart_id FROM mydb.cart WHERE customer_id=%s", (_userId))
+        data = cursor.fetchall()
+
+        cart_id = data[0][0]
+
+        cursor.execute("UPDATE mydb.cart_detail set deleted = %s WHERE cart_id = %s AND product_id = %s", (1, cart_id, id))
+        con.commit()
+        return redirect('/admin')
+
+    except Exception as e:
+        return render_template('errorLogin.html',error = str(e))
+    finally:
+        cursor.close()
+        con.close()
+
+@app.route("/getCart")
+def getCart():
+    if session.get('user'):
+        _userId = session.get('user')
+        try:
+            con = mysql.connect()
+            cursor = con.cursor()
+
+            cursor.execute("SELECT * FROM mydb.cart_detail_vw WHERE customer_id = %s", (_userId))
+            data = cursor.fetchall()
+            print("DATA ", data)
+            return json.dumps(data)
+        except Exception as e:
+            return False
+    else :
+        return render_template('errorLogin.html',error = str(e))
+
+
+@app.route("/spring")
+def spring():
+    return render_template('spring.html')
+
+@app.route("/summer")
+def summer():
+    return render_template('summer.html')
+
+@app.route("/fall")
+def fall():
+    return render_template('fall.html')
+
+@app.route("/winter")
+def winter():
+    return render_template('winter.html')
+
+@app.route("/userspring")
+def Userspring():
+    return render_template('userSpring.html')
+
+@app.route("/usersummer")
+def usersummer():
+    return render_template('userSummer.html')
+
+@app.route("/userfall")
+def userfall():
+    return render_template('userFall.html')
+
+@app.route("/userwinter")
+def userWinter():
+    return render_template('userWinter.html')
 
 if __name__ == "__main__":
     app.run()   
